@@ -37,27 +37,39 @@ const App: React.FC = () => {
     }
 
     const q = query(collection(db, "jobs"), where("userId", "==", user.uid));
+    
+    // ✅ Prevent multiple listeners
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const jobsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as Omit<Job, "id">),
-      }));
-      setJobs(jobsData);
+      console.log("Firestore Updated - Jobs:", snapshot.docs.length); // Debugging Log
+      setJobs(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          title: doc.data().title,
+          company: doc.data().company,
+          status: doc.data().status,
+          date: doc.data().date,
+          userId: doc.data().userId,
+        })) as Job[]
+      );
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // ✅ Cleanup previous listener
   }, [user]);
 
   // ✅ Add Job to Firestore
-  const addJob = async (newJob: Omit<Job, "id" | "userId">) => {
+  const addJob = async (newJob: { title: string; company: string; status: string; date: string }) => {
     if (!user) {
       console.error("User is not authenticated");
       return;
     }
 
     try {
-      const jobRef = await addDoc(collection(db, "jobs"), { ...newJob, userId: user.uid });
-      setJobs((prevJobs) => [...prevJobs, { id: jobRef.id, ...newJob, userId: user.uid }]);
+      await addDoc(collection(db, "jobs"), {
+        ...newJob,
+        userId: user.uid,
+      });
+
+      console.log("Job added successfully!"); // ✅ Debugging log
     } catch (error) {
       console.error("Error adding job:", error);
     }
@@ -67,22 +79,24 @@ const App: React.FC = () => {
   const deleteJob = async (id: string) => {
     try {
       await deleteDoc(doc(db, "jobs", id));
-      setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
+      console.log("Job deleted successfully!"); // ✅ Debugging log
     } catch (error) {
       console.error("Error deleting job:", error);
     }
   };
 
-  const filteredJobs = jobs.filter((job) =>
-    (filterStatus === "All" || job.status === filterStatus) &&
-    job.company.toLowerCase().includes(searchQuery.toLowerCase())
+  // ✅ Filter jobs
+  const filteredJobs = jobs.filter(
+    (job) =>
+      (filterStatus === "All" || job.status === filterStatus) &&
+      job.company.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <>
       <Navbar />
       <div className="container mx-auto max-w-3xl p-6 mt-20">
-        <Suspense fallback={<div className="text-center">Loading...</div>}>
+        <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/dashboard" element={<Dashboard jobs={jobs} />} />
@@ -92,7 +106,7 @@ const App: React.FC = () => {
               path="/job-tracker"
               element={
                 <>
-                  <JobForm addJob={addJob} />
+                  <JobForm/>
                   <FilterBar
                     filterStatus={filterStatus}
                     setFilterStatus={setFilterStatus}

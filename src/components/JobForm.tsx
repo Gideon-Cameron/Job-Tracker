@@ -3,20 +3,7 @@ import { db } from "../firebaseConfig"; // ✅ Import Firestore
 import { collection, addDoc } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext"; // ✅ Import Auth
 
-interface Job {
-  id: string;
-  title: string;
-  company: string;
-  status: string;
-  date: string;
-  userId: string;
-}
-
-interface JobFormProps {
-  addJob?: (job: Job) => void; // ✅ Pass job to update UI immediately
-}
-
-const JobForm: React.FC<JobFormProps> = ({ addJob }) => {
+const JobForm: React.FC = () => {
   const [title, setTitle] = useState("");
   const [company, setCompany] = useState("");
   const [status, setStatus] = useState("Applied");
@@ -25,29 +12,26 @@ const JobForm: React.FC<JobFormProps> = ({ addJob }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!title || !company) return;
+    if (!title.trim() || !company.trim()) return;
     if (!user) {
       alert("You must be logged in to add a job!");
       return;
     }
 
-    setLoading(true);
+    setLoading(true); // ✅ Prevents multiple submissions
 
     try {
-      const jobData = {
+      await addDoc(collection(db, "jobs"), {
         title,
         company,
         status,
         date: new Date().toISOString().split("T")[0], // Store date in YYYY-MM-DD format
         userId: user.uid,
-      };
+      });
 
-      const jobRef = await addDoc(collection(db, "jobs"), jobData); // ✅ Firestore handles updates
-      const newJob = { id: jobRef.id, ...jobData };
+      console.log("Job added successfully!"); // ✅ Debugging log
 
-      if (addJob) addJob(newJob); // ✅ Update UI immediately
-
-      // Clear form after submission
+      // ✅ Clear form after submission
       setTitle("");
       setCompany("");
       setStatus("Applied");
