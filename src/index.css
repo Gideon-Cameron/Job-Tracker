@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Dark Mode Adjustments */
+.dark {
+  background-color: #1E1E1E;
+  color: #E0E0E0;
+}
+
+.dark .bg-white {
+  background-color: #292929;
+}

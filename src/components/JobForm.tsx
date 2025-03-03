@@ -1,0 +1,109 @@
+import React, { useState } from "react";
+import { db } from "../firebaseConfig"; // ✅ Import Firestore
+import { collection, addDoc } from "firebase/firestore";
+import { useAuth } from "../context/AuthContext"; // ✅ Import Auth
+
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  status: string;
+  date: string;
+  userId: string;
+}
+
+interface JobFormProps {
+  addJob?: (job: Job) => void; // ✅ Pass job to update UI immediately
+}
+
+const JobForm: React.FC<JobFormProps> = ({ addJob }) => {
+  const [title, setTitle] = useState("");
+  const [company, setCompany] = useState("");
+  const [status, setStatus] = useState("Applied");
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth(); // ✅ Get logged-in user
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!title || !company) return;
+    if (!user) {
+      alert("You must be logged in to add a job!");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const jobData = {
+        title,
+        company,
+        status,
+        date: new Date().toISOString().split("T")[0], // Store date in YYYY-MM-DD format
+        userId: user.uid,
+      };
+
+      const jobRef = await addDoc(collection(db, "jobs"), jobData); // ✅ Firestore handles updates
+      const newJob = { id: jobRef.id, ...jobData };
+
+      if (addJob) addJob(newJob); // ✅ Update UI immediately
+
+      // Clear form after submission
+      setTitle("");
+      setCompany("");
+      setStatus("Applied");
+    } catch (error) {
+      console.error("Error adding job:", error);
+      alert("Failed to add job. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-4 rounded shadow-md">
+      <h2 className="text-xl font-semibold mb-3">Add a Job</h2>
+      <div className="mb-2">
+        <label className="block text-gray-700 dark:text-gray-300">Job Title</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-gray-700 dark:text-gray-300">Company</label>
+        <input
+          type="text"
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+          required
+        />
+      </div>
+      <div className="mb-2">
+        <label className="block text-gray-700 dark:text-gray-300">Status</label>
+        <select
+          className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+        >
+          <option value="Applied">Applied</option>
+          <option value="Interview Scheduled">Interview Scheduled</option>
+          <option value="Offer Received">Offer Received</option>
+          <option value="Rejected">Rejected</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        className={`mt-3 w-full bg-blue-600 text-white py-2 rounded ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+        disabled={loading}
+      >
+        {loading ? "Adding..." : "Add Job"}
+      </button>
+    </form>
+  );
+};
+
+export default JobForm;
