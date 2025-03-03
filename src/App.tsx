@@ -37,7 +37,7 @@ const App: React.FC = () => {
     }
 
     const q = query(collection(db, "jobs"), where("userId", "==", user.uid));
-    
+
     // ✅ Prevent multiple listeners
     const unsubscribe = onSnapshot(q, (snapshot) => {
       console.log("Firestore Updated - Jobs:", snapshot.docs.length); // Debugging Log
@@ -53,7 +53,7 @@ const App: React.FC = () => {
       );
     });
 
-    return () => unsubscribe(); // ✅ Cleanup previous listener
+    return () => unsubscribe();
   }, [user]);
 
   // ✅ Add Job to Firestore
@@ -64,12 +64,15 @@ const App: React.FC = () => {
     }
 
     try {
-      await addDoc(collection(db, "jobs"), {
+      const jobRef = await addDoc(collection(db, "jobs"), {
         ...newJob,
         userId: user.uid,
       });
 
-      console.log("Job added successfully!"); // ✅ Debugging log
+      // ✅ Update UI Optimistically
+      setJobs((prevJobs) => [...prevJobs, { id: jobRef.id, ...newJob, userId: user.uid }]);
+
+      console.log("Job added successfully!");
     } catch (error) {
       console.error("Error adding job:", error);
     }
@@ -79,7 +82,11 @@ const App: React.FC = () => {
   const deleteJob = async (id: string) => {
     try {
       await deleteDoc(doc(db, "jobs", id));
-      console.log("Job deleted successfully!"); // ✅ Debugging log
+
+      // ✅ Update UI Optimistically
+      setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
+
+      console.log("Job deleted successfully!");
     } catch (error) {
       console.error("Error deleting job:", error);
     }
@@ -106,7 +113,7 @@ const App: React.FC = () => {
               path="/job-tracker"
               element={
                 <>
-                  <JobForm/>
+                  <JobForm addJob={addJob} /> {/* ✅ Fixed: Pass `addJob` here */}
                   <FilterBar
                     filterStatus={filterStatus}
                     setFilterStatus={setFilterStatus}
