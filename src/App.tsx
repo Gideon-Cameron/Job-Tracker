@@ -2,7 +2,7 @@ import React, { lazy, Suspense, useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import { db } from "./firebaseConfig";
-import { collection, query, where, onSnapshot, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { collection, query, where, onSnapshot, deleteDoc, doc } from "firebase/firestore";
 import { useAuth } from "./context/AuthContext";
 
 // ✅ Lazy Load Pages for Better Performance
@@ -37,10 +37,10 @@ const App: React.FC = () => {
     }
 
     const q = query(collection(db, "jobs"), where("userId", "==", user.uid));
-
+    
     // ✅ Prevent multiple listeners
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      console.log("Firestore Updated - Jobs:", snapshot.docs.length); // Debugging Log
+      console.log("Firestore Updated - Jobs:", snapshot.docs.length);
       setJobs(
         snapshot.docs.map((doc) => ({
           id: doc.id,
@@ -53,39 +53,14 @@ const App: React.FC = () => {
       );
     });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // ✅ Cleanup previous listener
   }, [user]);
-
-  // ✅ Add Job to Firestore
-  const addJob = async (newJob: { title: string; company: string; status: string; date: string }) => {
-    if (!user) {
-      console.error("User is not authenticated");
-      return;
-    }
-
-    try {
-      const jobRef = await addDoc(collection(db, "jobs"), {
-        ...newJob,
-        userId: user.uid,
-      });
-
-      // ✅ Update UI Optimistically
-      setJobs((prevJobs) => [...prevJobs, { id: jobRef.id, ...newJob, userId: user.uid }]);
-
-      console.log("Job added successfully!");
-    } catch (error) {
-      console.error("Error adding job:", error);
-    }
-  };
 
   // ✅ Delete Job from Firestore
   const deleteJob = async (id: string) => {
     try {
       await deleteDoc(doc(db, "jobs", id));
-
-      // ✅ Update UI Optimistically
       setJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
-
       console.log("Job deleted successfully!");
     } catch (error) {
       console.error("Error deleting job:", error);
@@ -113,7 +88,7 @@ const App: React.FC = () => {
               path="/job-tracker"
               element={
                 <>
-                  <JobForm addJob={addJob} /> {/* ✅ Fixed: Pass `addJob` here */}
+                  <JobForm /> {/* ✅ Removed `addJob` */}
                   <FilterBar
                     filterStatus={filterStatus}
                     setFilterStatus={setFilterStatus}
