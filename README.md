@@ -1,50 +1,45 @@
-# React + TypeScript + Vite
+# 🗂️ Job Tracker App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A productivity-focused job application tracker that allows users to **log in**, **track job applications**, and monitor progress from **applied** to **offer** or **rejection**.
 
-Currently, two official plugins are available:
+**🔗 Live Demo**: [job-trackerz.netlify.app](https://job-trackerz.netlify.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🎯 Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- 🔐 **User Authentication** – Secure login system with protected routes
+- 📋 **Application Statuses** – Track jobs as:
+  - Applied
+  - Interview Scheduled
+  - Offer Received
+  - Rejected
+- 🧠 **Persistent State** – Keeps data across sessions
+- 📱 **Mobile Friendly** – Clean UI designed for all screen sizes
+- ✅ **Accessible** – Keyboard navigable and semantic layout
+- 🚀 **Netlify Deployed** – Fast load & optimized for performance
 
-- Configure the top-level `parserOptions` property like this:
+---
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🛠 Tech Stack
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+| Technology     | Purpose                          |
+|----------------|----------------------------------|
+| **TypeScript** | Frontend framework               |
+| **React**      | Frontend framework               |
+| **React Router** | Page routing & protected views |
+| **Tailwind CSS** | Utility-first responsive UI    |
+| **LocalStorage or Backend** | (Optional) Persist data |
+| **Netlify**    | Hosting & continuous deployment  |
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+---
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+
+## 🚀 Getting Started
+
+### Clone the project
+
+```bash
+git clone https://github.com/Gideon-Cameron/job-tracker-app.git
+cd job-tracker-app
+npm install
