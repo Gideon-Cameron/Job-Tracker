@@ -1,5 +1,10 @@
 # 🗂️ Job Tracker App
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b3726b5b-80c7-4207-8c4c-5a08e0eb6ad6/deploy-status)](https://app.netlify.com/sites/job-trackerz/deploys)
+![License](https://img.shields.io/github/license/Gideon-Cameron/Job-Tracker)
+![Stars](https://img.shields.io/github/stars/Gideon-Cameron/Job-Tracker?style=social)
+
+
 A productivity-focused job application tracker that allows users to **log in**, **track job applications**, and monitor progress from **applied** to **offer** or **rejection**.
 
 **🔗 Live Demo**: [job-trackerz.netlify.app](https://job-trackerz.netlify.app/)
