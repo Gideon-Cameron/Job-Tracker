@@ -37,8 +37,7 @@ const App: React.FC = () => {
     }
 
     const q = query(collection(db, "jobs"), where("userId", "==", user.uid));
-    
-    // ✅ Prevent multiple listeners
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       console.log("Firestore Updated - Jobs:", snapshot.docs.length);
       setJobs(
@@ -53,10 +52,9 @@ const App: React.FC = () => {
       );
     });
 
-    return () => unsubscribe(); // ✅ Cleanup previous listener
+    return () => unsubscribe();
   }, [user]);
 
-  // ✅ Delete Job from Firestore
   const deleteJob = async (id: string) => {
     try {
       await deleteDoc(doc(db, "jobs", id));
@@ -67,7 +65,6 @@ const App: React.FC = () => {
     }
   };
 
-  // ✅ Filter jobs
   const filteredJobs = jobs.filter(
     (job) =>
       (filterStatus === "All" || job.status === filterStatus) &&
@@ -75,7 +72,7 @@ const App: React.FC = () => {
   );
 
   return (
-    <>
+    <div className="min-h-screen bg-white text-gray-900 dark:bg-[#111827] dark:text-darkPrimaryText transition-colors duration-300">
       <Navbar />
       <div className="container mx-auto max-w-3xl p-6 mt-20">
         <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>
@@ -88,7 +85,7 @@ const App: React.FC = () => {
               path="/job-tracker"
               element={
                 <>
-                  <JobForm /> {/* ✅ Removed `addJob` */}
+                  <JobForm />
                   <FilterBar
                     filterStatus={filterStatus}
                     setFilterStatus={setFilterStatus}
@@ -102,7 +99,7 @@ const App: React.FC = () => {
           </Routes>
         </Suspense>
       </div>
-    </>
+    </div>
   );
 };
 

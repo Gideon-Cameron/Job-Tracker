@@ -41,13 +41,13 @@ const JobForm: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }; 
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-4 rounded shadow-md">
-      <h2 className="text-xl font-semibold mb-3">Add a Job</h2>
+    <form onSubmit={handleSubmit} className="bg-white dark:bg-[#112240] p-4 rounded shadow-md">
+      <h2 className="text-xl font-semibold mb-3 text-[#ccd6f6]">Add a Job</h2>
       <div className="mb-2">
-        <label className="block text-gray-700 dark:text-gray-300">Job Title</label>
+        <label className="block text-[#8892b0] dark:text-gray-300">Job Title</label>
         <input
           type="text"
           className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
@@ -57,7 +57,7 @@ const JobForm: React.FC = () => {
         />
       </div>
       <div className="mb-2">
-        <label className="block text-gray-700 dark:text-gray-300">Company</label>
+        <label className="block text-[#8892b0] dark:text-gray-300">Company</label>
         <input
           type="text"
           className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
@@ -67,7 +67,7 @@ const JobForm: React.FC = () => {
         />
       </div>
       <div className="mb-2">
-        <label className="block text-gray-700 dark:text-gray-300">Status</label>
+        <label className="block text-[#8892b0] dark:text-gray-300">Status</label>
         <select
           className="w-full p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
           value={status}
@@ -81,7 +81,7 @@ const JobForm: React.FC = () => {
       </div>
       <button
         type="submit"
-        className={`mt-3 w-full bg-blue-600 text-white py-2 rounded ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+        className={`mt-3 w-full border border-[#64ffda] text-[#64ffda] hover:bg-[#64ffda]/10 transition-colors duration-200 py-2 rounded ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
         disabled={loading}
       >
         {loading ? "Adding..." : "Add Job"}
