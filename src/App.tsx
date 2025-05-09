@@ -72,7 +72,7 @@ const App: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 dark:bg-[#111827] dark:text-darkPrimaryText transition-colors duration-300">
+    <div className="min-h-screen bg-white text-gray-900 dark:bg-[#0a192f] dark:text-darkPrimaryText transition-colors duration-300">
       <Navbar />
       <div className="container mx-auto max-w-3xl p-6 mt-20">
         <Suspense fallback={<div className="text-center text-gray-500">Loading...</div>}>

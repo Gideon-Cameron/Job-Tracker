@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 interface FilterBarProps {
   filterStatus: string;
@@ -7,13 +8,26 @@ interface FilterBarProps {
   setSearchQuery: (query: string) => void;
 }
 
-const FilterBar: React.FC<FilterBarProps> = ({ filterStatus, setFilterStatus, searchQuery, setSearchQuery }) => {
+const FilterBar: React.FC<FilterBarProps> = ({
+  filterStatus,
+  setFilterStatus,
+  searchQuery,
+  setSearchQuery,
+}) => {
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded shadow-md flex justify-between items-center">
-      <div>
-        <label className="text-gray-700 dark:text-gray-300">Filter by Status:</label>
+    <motion.div
+      className="bg-white dark:bg-[#112240] p-4 rounded-lg shadow-md flex flex-wrap md:justify-between gap-4 items-center transition-colors duration-300"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      {/* Filter Dropdown */}
+      <div className="flex items-center gap-2">
+        <label className="text-gray-800 dark:text-[#8892b0] font-medium">
+          Filter by Status:
+        </label>
         <select
-          className="ml-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
+          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded dark:bg-[#0a192f] dark:text-white focus:outline-none focus:ring-2 focus:ring-[#64ffda] transition"
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
         >
@@ -24,17 +38,21 @@ const FilterBar: React.FC<FilterBarProps> = ({ filterStatus, setFilterStatus, se
           <option value="Rejected">Rejected</option>
         </select>
       </div>
-      <div>
-        <label className="text-gray-700 dark:text-gray-300">Search:</label>
+
+      {/* Search Field */}
+      <div className="flex items-center gap-2">
+        <label className="text-gray-800 dark:text-[#8892b0] font-medium">
+          Search:
+        </label>
         <input
           type="text"
-          className="ml-2 p-2 border rounded dark:bg-gray-700 dark:border-gray-600"
-          placeholder="Search by company"
+          placeholder="Company name"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded dark:bg-[#0a192f] dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#64ffda] transition"
         />
       </div>
-    </div>
+    </motion.div>
   );
 };
 
