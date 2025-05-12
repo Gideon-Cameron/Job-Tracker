@@ -40,7 +40,7 @@ const Dashboard: React.FC<DashboardProps> = ({ jobs }) => {
     return (
       <div className="container mx-auto text-center mt-20">
         <h2 className="text-xl font-bold text-gray-800 dark:text-[#ccd6f6]">
-          You are not logged in
+          You are not logged in.
         </h2>
         <p className="text-gray-600 dark:text-[#8892b0]">Redirecting to login...</p>
       </div>
