@@ -25,7 +25,7 @@ const Home: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4, duration: 0.5 }}
       >
-        Your personal job search assistant. Organize, track, and monitor your job applications from one place. Easily manage statuses, add notes, and never lose track of your job hunt progress again.
+        Your personal job search assistant. Organize, track, and monitor your job applications from one place. Easily manage statuses, add notes, and never lose track of your job hunt progress again!
       </motion.p>
 
       <motion.div
