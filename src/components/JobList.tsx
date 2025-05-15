@@ -42,7 +42,7 @@ const JobList: React.FC<JobListProps> = ({ jobs, deleteJob }) => {
       </h2>
 
       {jobs.length === 0 ? (
-        <p className="text-gray-500 dark:text-[#8892b0]">No jobs added</p>
+        <p className="text-gray-500 dark:text-[#8892b0]">No Jobs Added</p>
       ) : (
         <ul className="space-y-4">
           {jobs.map((job) => (
